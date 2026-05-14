@@ -1,31 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Student Kiosk | Liveness-Guard</title>
     <style>
-        body { background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif; }
-        .status-box { padding: 40px; border-radius: 20px; background: #1e293b; text-align: center; border: 2px solid #38bdf8; }
-        h1 { color: #38bdf8; margin-bottom: 10px; }
-        .blink-msg { font-size: 1.2rem; color: #94a3b8; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .container { background: #1e293b; padding: 40px; border-radius: 12px; text-align: center; border-top: 4px solid #38bdf8; width: 450px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
+        h2 { color: #38bdf8; margin-bottom: 10px; }
+        p { color: #94a3b8; line-height: 1.6; margin-bottom: 30px; }
+        
+        .launch-btn { background: #22c55e; color: #0f172a; border: none; padding: 15px 30px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; width: 100%; margin-bottom: 20px; }
+        .launch-btn:hover { background: #16a34a; transform: scale(1.02); }
+        
+        .status { font-size: 1rem; color: #38bdf8; font-weight: bold; min-height: 24px; }
+        .back-link { display: block; margin-top: 20px; color: #64748b; text-decoration: none; transition: 0.2s; }
+        .back-link:hover { color: white; }
     </style>
 </head>
 <body>
-    <div class="status-box">
-        <h1>Liveness-Guard</h1>
-        <p class="blink-msg">Please look at the camera and blink to mark attendance</p>
-        <div id="user-display" style="margin-top: 20px; font-size: 1.5rem; font-weight: bold; color: #22c55e;"></div>
+    <div class="container">
+        <h2>Student Attendance Kiosk</h2>
+        <p>Ensure your face is clearly visible. Click below to launch the physical verification camera, and blink once to confirm attendance.</p>
+        
+        <button class="launch-btn" onclick="startCamera()">📷 Launch Secure Camera</button>
+        <div class="status" id="statusText"></div>
+        
+        <a href="/" class="back-link">← Back to Main Menu</a>
     </div>
 
     <script>
-        async function checkStatus() {
-            const res = await fetch('/api/data');
-            const data = await res.json();
-            if (data.present_logs.length > 0) {
-                const latest = data.present_logs[0];
-                document.getElementById('user-display').innerText = "Last Marked: " + latest.Name;
-            }
+        function startCamera() {
+            const stat = document.getElementById('statusText');
+            stat.innerText = "Waking up camera... Please look at the new window.";
+            stat.style.color = "#38bdf8";
+            
+            fetch('/api/start_camera')
+                .then(res => res.json())
+                .then(data => {
+                    setTimeout(() => { stat.innerText = "Camera Active."; }, 2000);
+                })
+                .catch(err => {
+                    stat.innerText = "System error: Could not launch camera.";
+                    stat.style.color = "#ef4444";
+                });
         }
-        setInterval(checkStatus, 2000);
     </script>
 </body>
 </html>

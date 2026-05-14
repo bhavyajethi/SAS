@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Face | Liveness-Guard</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .container { background: #1e293b; padding: 30px; border-radius: 12px; border-top: 4px solid #22c55e; width: 450px; text-align: center; }
+        h2 { color: #22c55e; margin-bottom: 20px; }
+        video { width: 100%; border-radius: 8px; border: 2px solid #334155; margin-bottom: 15px; transform: scaleX(-1); }
+        input[type="text"] { width: 100%; padding: 12px; margin-bottom: 15px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px; }
+        button { width: 100%; padding: 15px; background: #22c55e; color: #0f172a; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        button:hover { background: #16a34a; }
+        #status { margin-top: 15px; font-weight: bold; color: #38bdf8; }
+        .back-link { display: block; margin-top: 20px; color: #94a3b8; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Live Registration</h2>
+        <video id="video" autoplay playsinline></video>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <input type="text" id="sName" placeholder="Full Name (e.g. Bhavya_Jethi)" required>
+        <button id="snapBtn">Scan Face & Register</button>
+        <div id="status"></div>
+        <a href="/" class="back-link">← Back to Portal</a>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const stat = document.getElementById('status');
+
+        navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+            video.srcObject = stream;
+        }).catch(err => {
+            stat.innerText = "Camera access denied.";
+            stat.style.color = "#ef4444";
+        });
+
+        document.getElementById('snapBtn').addEventListener('click', async () => {
+            const name = document.getElementById('sName').value.trim();
+            if(!name) return alert("Please enter your name.");
+            
+            stat.innerText = "Scanning face... Please hold still.";
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0);
+            
+            const imgData = canvas.toDataURL('image/jpeg');
+            const fd = new FormData();
+            fd.append("name", name);
+            fd.append("image", imgData);
+
+            try {
+                const res = await fetch('/api/register_live', { method: 'POST', body: fd });
+                const data = await res.json();
+                stat.innerText = data.msg;
+                stat.style.color = data.success ? "#22c55e" : "#ef4444";
+                if(data.success) document.getElementById('sName').value = "";
+            } catch(e) {
+                stat.innerText = "Server error.";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+    "Monday": [
+        {"start": "09:00", "end": "10:00", "subject": "Physics"},
+        {"start": "10:15", "end": "11:15", "subject": "Maths"},
+        {"start": "11:30", "end": "12:30", "subject": "Chemistry"},
+        {"start": "13:30", "end": "14:30", "subject": "Deep Learning"},
+        {"start": "14:45", "end": "15:45", "subject": "Cloud Computing"}
+    ],
+    "Tuesday": [
+        {"start": "09:00", "end": "10:00", "subject": "Gen AI"},
+        {"start": "10:15", "end": "11:15", "subject": "Data Structures"},
+        {"start": "11:30", "end": "12:30", "subject": "Operating Systems"},
+        {"start": "13:30", "end": "14:30", "subject": "Databases"},
+        {"start": "14:45", "end": "15:45", "subject": "Computer Networks"}
+    ],
+    "Wednesday": [
+        {"start": "09:00", "end": "10:00", "subject": "Maths"},
+        {"start": "10:15", "end": "11:15", "subject": "Physics"},
+        {"start": "11:30", "end": "12:30", "subject": "Gen AI"},
+        {"start": "13:30", "end": "14:30", "subject": "Cloud Computing"},
+        {"start": "14:45", "end": "15:45", "subject": "Data Structures"}
+    ],
+    "Thursday": [
+        {"start": "09:00", "end": "10:00", "subject": "Chemistry"},
+        {"start": "10:15", "end": "11:15", "subject": "Operating Systems"},
+        {"start": "11:30", "end": "12:30", "subject": "Databases"},
+        {"start": "13:30", "end": "14:30", "subject": "Deep Learning"},
+        {"start": "14:45", "end": "15:45", "subject": "Maths"},
+        {"start": "19:00", "end": "23:59", "subject": "Physics"}
+    ],
+    "Friday": [
+        {"start": "09:00", "end": "10:00", "subject": "Computer Networks"},
+        {"start": "10:15", "end": "11:15", "subject": "Physics"},
+        {"start": "11:30", "end": "12:30", "subject": "Cloud Computing"},
+        {"start": "13:30", "end": "14:30", "subject": "Gen AI"},
+        {"start": "14:45", "end": "15:45", "subject": "Chemistry"}
+    ]
+}
